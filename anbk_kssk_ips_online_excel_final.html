@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seleksi Lomba KSSK - ANBK IPS</title>
+<style>
+:root{
+  --navy:#12305a;--blue:#2563eb;--blue2:#1d4ed8;--bg:#eef4fb;--card:#fff;
+  --text:#172033;--muted:#64748b;--border:#dbe4ef;--ok:#16a34a;--warn:#d97706;--danger:#dc2626;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.hidden{display:none!important}
+.topbar{height:64px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:20;gap:12px}
+.brand{font-weight:800;color:var(--navy)}
+.muted{color:var(--muted)}
+.btn{border:none;border-radius:10px;padding:11px 16px;font-weight:700}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue2)}
+.btn-secondary{background:#e8eef8;color:var(--navy)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-success{background:var(--ok);color:#fff}
+.btn-outline{background:#fff;border:1px solid var(--border);color:var(--text)}
+.page{min-height:100vh}
+.center-wrap{min-height:100vh;display:grid;place-items:center;padding:28px}
+.home-shell{width:min(1020px,100%);display:grid;grid-template-columns:1.05fr .95fr;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 18px 50px rgba(15,23,42,.12)}
+.hero{padding:56px;background:linear-gradient(135deg,#12305a,#2563eb);color:#fff}
+.hero h1{font-size:42px;line-height:1.05;margin:0 0 14px}
+.hero .pill{display:inline-block;padding:7px 11px;border:1px solid rgba(255,255,255,.4);border-radius:999px;margin-bottom:18px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px}
+.info-box{background:rgba(255,255,255,.12);padding:14px;border-radius:14px}
+.login-panel{padding:42px}
+.login-panel h2{margin-top:0}
+.field{display:flex;flex-direction:column;gap:7px;margin:15px 0}
+.field label{font-weight:700;font-size:14px}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px;background:#fff}
+.field textarea{min-height:110px;resize:vertical}
+.row{display:flex;gap:12px;align-items:center}
+.row>*{flex:1}
+.quick-admin{margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
+.exam-layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 64px)}
+.sidebar{background:#fff;border-right:1px solid var(--border);padding:20px;position:sticky;top:64px;height:calc(100vh - 64px);overflow:auto}
+.q-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:15px 0}
+.qnum{aspect-ratio:1;border-radius:9px;border:1px solid var(--border);background:#f8fafc;font-weight:800}
+.qnum.answered{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
+.qnum.doubt{background:#fef3c7;border-color:#f59e0b;color:#92400e}
+.qnum.active{outline:3px solid rgba(37,99,235,.25)}
+.legend{font-size:12px;display:grid;gap:8px}
+.legend span{display:flex;gap:8px;align-items:center}
+.dot{width:13px;height:13px;border-radius:3px;border:1px solid var(--border);display:inline-block}
+.dot.blue{background:#dbeafe}.dot.yellow{background:#fef3c7}.dot.gray{background:#f8fafc}
+.exam-main{padding:28px;max-width:980px;width:100%;margin:0 auto}
+.timer{font-weight:900;font-variant-numeric:tabular-nums;padding:9px 12px;border-radius:10px;background:#eff6ff;color:#1d4ed8;white-space:nowrap}
+.timer.warning{background:#fff7ed;color:#c2410c}
+.timer.danger{background:#fef2f2;color:#b91c1c}
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:0 6px 20px rgba(15,23,42,.05)}
+.qhead{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.badge{font-size:12px;font-weight:800;padding:6px 9px;border-radius:999px;background:#e0e7ff;color:#3730a3}
+.stimulus{background:#f8fafc;border-left:4px solid var(--blue);padding:16px;border-radius:10px;margin:18px 0}
+.qimage{width:100%;max-height:360px;object-fit:contain;border:1px solid var(--border);border-radius:12px;margin:14px 0;background:#f8fafc}
+.option{display:flex;gap:12px;border:1px solid var(--border);border-radius:12px;padding:14px;margin:10px 0;transition:.15s;background:#fff}
+.option:hover{border-color:#93c5fd}
+.option.selected{background:#eff6ff;border-color:#3b82f6}
+.option-key{font-weight:900;min-width:24px}
+.exam-actions{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.progress{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;background:var(--blue)}
+.overlay{position:fixed;inset:0;background:rgba(127,29,29,.97);z-index:999;display:flex;align-items:center;justify-content:center;color:#fff;padding:24px;text-align:center}
+.overlay-box{max-width:620px}
+.overlay h1{font-size:48px;margin:0 0 12px}
+.overlay .count{font-size:80px;font-weight:900}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:100;display:grid;place-items:center;padding:20px}
+.modal{width:min(560px,100%);background:#fff;border-radius:18px;padding:24px;max-height:90vh;overflow:auto}
+.modal h3{margin-top:0}
+.result-wrap{max-width:1000px;margin:28px auto;padding:0 20px 40px}
+.score-card{text-align:center;padding:30px;background:linear-gradient(135deg,#12305a,#2563eb);color:#fff;border-radius:20px}
+.score{font-size:64px;font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:18px 0}
+.stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.review{margin-top:14px}
+.review.correct{border-left:5px solid var(--ok)}
+.review.wrong{border-left:5px solid var(--danger)}
+.admin-layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.admin-nav{background:var(--navy);color:#fff;padding:24px;position:sticky;top:0;height:100vh}
+.admin-nav h2{font-size:18px}
+.admin-nav button{width:100%;text-align:left;margin:6px 0;background:transparent;color:#fff;border:0;padding:11px;border-radius:8px}
+.admin-nav button:hover,.admin-nav button.active{background:rgba(255,255,255,.12)}
+.admin-main{padding:28px;overflow:auto}
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.metric{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px}
+.metric strong{display:block;font-size:32px;margin-top:6px}
+.table-wrap{overflow:auto;background:#fff;border:1px solid var(--border);border-radius:14px;margin-top:18px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:#f8fafc}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.searchbar{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.searchbar input,.searchbar select{border:1px solid var(--border);border-radius:9px;padding:10px}
+.admin-form{max-width:850px;background:#fff;padding:24px;border:1px solid var(--border);border-radius:16px}
+.img-preview{max-width:100%;max-height:280px;object-fit:contain;border:1px solid var(--border);border-radius:10px}
+.notice{padding:12px 14px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:10px;margin:12px 0}
+.success{padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:10px;margin:12px 0}
+.small{font-size:12px}
+@media(max-width:800px){
+ .home-shell{grid-template-columns:1fr}.hero{display:none}
+ .exam-layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--border)}
+ .q-grid{grid-template-columns:repeat(10,1fr)}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .admin-layout{grid-template-columns:1fr}.admin-nav{position:static;height:auto}.metric-grid{grid-template-columns:repeat(2,1fr)}
+ .topbar{padding:0 12px}.exam-main{padding:14px}.card{padding:16px}
+}
+@media(max-width:520px){
+ .q-grid{grid-template-columns:repeat(6,1fr)}.metric-grid{grid-template-columns:1fr}.row{flex-direction:column;align-items:stretch}
+ .topbar{height:auto;min-height:64px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+}
+@media print{
+ .no-print,.topbar,.sidebar,.exam-actions,.admin-nav{display:none!important}
+ body{background:#fff}
+ .result-wrap{max-width:none;margin:0;padding:0}
+ .card,.review,.score-card{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modalRoot"></div>
+<div id="cheatOverlay" class="overlay hidden">
+  <div class="overlay-box">
+    <h1>JANGAN PINDAH TAB</h1>
+    <p id="violationText">Pelanggaran 1 dari 3</p>
+    <div class="count" id="cheatCount">10</div>
+    <p>Kembali ke halaman ujian sebelum hitungan selesai.</p>
+    <button class="btn btn-success" onclick="returnToExam()">KEMBALI KE UJIAN</button>
+  </div>
+</div>
+
+<script>
+const APP_KEY="kssk_anbk_state_v2";
+const QUESTION_KEY="kssk_anbk_questions_v2";
+const SUBMISSION_KEY="kssk_anbk_submissions_v3";
+const EXCEL_CONFIG_KEY="kssk_anbk_excel_config_v1";
+const ADMIN_PASSWORD="1234";
+
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function attr(v){return esc(v).replace(/`/g,"&#096;")}
+function svgImage(title, subtitle){
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420">
+  <rect width="100%" height="100%" fill="#eef4fb"/>
+  <rect x="35" y="35" width="930" height="350" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <text x="500" y="165" text-anchor="middle" font-family="Arial" font-size="38" font-weight="700" fill="#12305a">${title}</text>
+  <text x="500" y="225" text-anchor="middle" font-family="Arial" font-size="24" fill="#475569">${subtitle}</text>
+  <path d="M170 305 H830" stroke="#2563eb" stroke-width="10" stroke-linecap="round"/>
+  </svg>`;
+  return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(svg);
+}
+
+const DEFAULT_QUESTIONS=[
+{id:1,content:"Letak geografis Indonesia di antara dua benua dan dua samudra memberi keuntungan utama berupa ....",stimulus:null,image:null,options:["terisolasinya kegiatan perdagangan","posisi strategis dalam jalur perdagangan internasional","hilangnya perbedaan budaya antardaerah","berkurangnya pengaruh musim terhadap kegiatan ekonomi"],answer:"B",difficulty:"REGULER",explanation:"Indonesia berada di antara Benua Asia-Australia serta Samudra Hindia-Pasifik sehingga strategis bagi perdagangan dan pelayaran internasional."},
+{id:2,content:"Wilayah pantai cenderung memiliki kegiatan ekonomi yang berbeda dengan wilayah pegunungan karena ....",stimulus:null,image:null,options:["setiap wilayah memiliki sumber daya dan kondisi alam berbeda","semua penduduk pantai bekerja sebagai nelayan","pegunungan tidak memiliki sumber daya ekonomi","kegiatan ekonomi tidak dipengaruhi kondisi geografis"],answer:"A",difficulty:"REGULER",explanation:"Kondisi fisik dan sumber daya suatu wilayah memengaruhi jenis kegiatan ekonomi yang berkembang."},
+{id:3,content:"Contoh interaksi antarruang yang terjadi karena perbedaan potensi wilayah adalah ....",stimulus:null,image:null,options:["petani menyimpan seluruh hasil panen untuk sendiri","nelayan menjual ikan ke daerah pegunungan dan membeli sayuran dari sana","penduduk berhenti melakukan perdagangan antardaerah","setiap daerah memenuhi semua kebutuhan tanpa daerah lain"],answer:"B",difficulty:"REGULER",explanation:"Perbedaan potensi menciptakan saling melengkapi. Ikan dari pantai dan sayuran dari pegunungan dipertukarkan melalui perdagangan."},
+{id:4,content:"Kebutuhan yang harus dipenuhi terlebih dahulu agar manusia dapat mempertahankan hidup disebut kebutuhan ....",stimulus:null,image:null,options:["primer","sekunder","tersier","rekreasi"],answer:"A",difficulty:"REGULER",explanation:"Kebutuhan primer seperti pangan, sandang, dan papan merupakan kebutuhan pokok yang diprioritaskan."},
+{id:5,content:"Pelaku ekonomi yang menghasilkan barang atau jasa untuk memenuhi kebutuhan masyarakat disebut ....",stimulus:null,image:null,options:["konsumen","produsen","distributor","regulator"],answer:"B",difficulty:"REGULER",explanation:"Produsen melakukan kegiatan produksi, yaitu menghasilkan barang atau jasa."},
+{id:6,content:"Rumah tangga konsumen berperan dalam kegiatan ekonomi terutama dengan cara ....",stimulus:null,image:null,options:["mengonsumsi barang dan jasa serta menyediakan faktor produksi","menetapkan seluruh harga barang di pasar","mencetak uang sebagai alat pembayaran","mengendalikan seluruh perusahaan swasta"],answer:"A",difficulty:"REGULER",explanation:"Rumah tangga konsumen memakai barang/jasa sekaligus menyediakan faktor produksi seperti tenaga kerja."},
+{id:7,content:"Salah satu ciri kehidupan masyarakat Indonesia pada masa bercocok tanam adalah ....",stimulus:null,image:null,options:["hidup sepenuhnya berpindah-pindah","mulai menetap dan menghasilkan bahan makanan","bergantung hanya pada perburuan","tidak mengenal pembagian kerja"],answer:"B",difficulty:"REGULER",explanation:"Perkembangan bercocok tanam mendorong kehidupan menetap, produksi pangan, dan pembagian kerja yang lebih teratur."},
+{id:8,content:"Masuknya pengaruh Hindu-Buddha ke Indonesia salah satunya ditunjukkan oleh ....",stimulus:null,image:null,options:["berkembangnya candi dan kerajaan bercorak Hindu-Buddha","hilangnya aktivitas perdagangan maritim","berakhirnya penggunaan bahasa dan tulisan","ditutupnya hubungan dengan wilayah Asia lainnya"],answer:"A",difficulty:"REGULER",explanation:"Candi, prasasti, serta kerajaan Hindu-Buddha merupakan bukti pengaruh budaya dan politik India di Nusantara."},
+{id:9,content:"Penyebaran Islam di Nusantara berkembang pesat melalui jalur perdagangan karena ....",stimulus:null,image:null,options:["pelabuhan menjadi tempat pertemuan pedagang dari berbagai wilayah","perdagangan hanya boleh dilakukan kerajaan Islam","masyarakat pesisir menolak hubungan luar","pedagang dilarang berinteraksi dengan penduduk lokal"],answer:"A",difficulty:"REGULER",explanation:"Pelabuhan menjadi pusat interaksi sosial-ekonomi sehingga ajaran Islam menyebar melalui pedagang dan jaringan komunitas."},
+{id:10,content:"Kebijakan monopoli perdagangan pada masa kolonial merugikan masyarakat karena ....",stimulus:null,image:null,options:["masyarakat bebas menentukan harga","pilihan pembeli dan harga komoditas dibatasi penguasa","produksi rakyat selalu meningkat","semua hasil perdagangan kembali kepada petani"],answer:"B",difficulty:"REGULER",explanation:"Monopoli mengurangi kebebasan produsen menjual barang dan memungkinkan penguasa menentukan syarat perdagangan yang merugikan rakyat."},
+{id:11,content:"Salah satu faktor tumbuhnya semangat kebangsaan Indonesia pada awal abad ke-20 adalah ....",stimulus:null,image:null,options:["berkembangnya pendidikan dan organisasi modern","berkurangnya komunikasi antardaerah","hilangnya pers dan media","larangan membentuk organisasi"],answer:"A",difficulty:"REGULER",explanation:"Pendidikan, pers, dan organisasi modern membantu munculnya kelompok terdidik dan kesadaran kebangsaan."},
+{id:12,content:"Kegiatan distribusi berfungsi untuk ....",stimulus:null,image:null,options:["menghasilkan bahan mentah","menyalurkan barang dari produsen kepada konsumen","menghabiskan nilai guna barang","menentukan semua kebutuhan masyarakat"],answer:"B",difficulty:"REGULER",explanation:"Distribusi menghubungkan produsen dan konsumen melalui penyaluran barang atau jasa."},
+{id:13,content:"Kelangkaan terjadi ketika ....",stimulus:null,image:null,options:["semua kebutuhan dapat dipenuhi tanpa batas","alat pemuas kebutuhan terbatas dibanding kebutuhan manusia","barang tersedia tanpa biaya","kebutuhan manusia selalu berkurang"],answer:"B",difficulty:"REGULER",explanation:"Kelangkaan muncul karena kebutuhan relatif tidak terbatas sedangkan sumber daya untuk memenuhinya terbatas."},
+{id:14,content:"Pembangunan jalan yang menghubungkan desa dengan kota dapat meningkatkan interaksi antarruang karena ....",stimulus:null,image:null,options:["menghambat perpindahan barang","meningkatkan aksesibilitas dan mempercepat mobilitas","menghilangkan seluruh perbedaan wilayah","mengurangi hubungan ekonomi"],answer:"B",difficulty:"REGULER",explanation:"Akses transportasi yang lebih baik menurunkan hambatan jarak dan memperlancar pergerakan orang maupun barang."},
+{id:15,content:"Perubahan sosial pada masa pergerakan nasional tampak dari ....",stimulus:null,image:null,options:["meningkatnya kesadaran untuk bersatu sebagai bangsa","masyarakat semakin terpisah berdasarkan daerah","organisasi modern sepenuhnya menghilang","pendidikan tidak berpengaruh terhadap masyarakat"],answer:"A",difficulty:"REGULER",explanation:"Pergerakan nasional memperkuat identitas kebangsaan dan kesadaran untuk berjuang bersama melampaui identitas kedaerahan."},
+
+{id:16,stimulus:"Kabupaten A memiliki hasil ikan melimpah tetapi produksi sayur rendah. Kabupaten B berada di dataran tinggi dengan produksi sayur tinggi namun jauh dari laut. Setelah jalan antarkabupaten diperbaiki, perdagangan kedua daerah meningkat.",content:"Faktor yang paling menjelaskan peningkatan interaksi antarruang tersebut adalah ....",image:svgImage("PANTAI ↔ PEGUNUNGAN","Perbedaan potensi wilayah dan akses transportasi"),options:["kesamaan sumber daya kedua wilayah","saling melengkapi potensi dan meningkatnya aksesibilitas","berkurangnya kebutuhan masyarakat","larangan perdagangan antardaerah"],answer:"B",difficulty:"HOTS",explanation:"Interaksi meningkat karena kedua wilayah memiliki komoditas berbeda yang saling dibutuhkan dan akses transportasi membuat pertukaran lebih mudah."},
+{id:17,stimulus:"Sebuah kota pesisir mengalami pertumbuhan penduduk dan pembangunan permukiman di kawasan rawan banjir rob. Pada saat yang sama, sebagian mangrove berkurang karena alih fungsi lahan.",content:"Kebijakan yang paling tepat untuk mengurangi risiko sekaligus mempertahankan aktivitas ekonomi adalah ....",image:svgImage("KOTA PESISIR","Permukiman • Mangrove • Risiko rob"),options:["memperluas permukiman hingga garis pantai","menghentikan seluruh kegiatan ekonomi pesisir","memulihkan mangrove dan mengatur zonasi pembangunan","menutup seluruh akses menuju pantai"],answer:"C",difficulty:"HOTS",explanation:"Restorasi mangrove memperkuat perlindungan alami, sedangkan zonasi mengurangi paparan penduduk tanpa harus menghentikan seluruh ekonomi pesisir."},
+{id:18,stimulus:"Harga beras naik setelah gagal panen di beberapa daerah. Pendapatan keluarga tetap, sedangkan kebutuhan sekolah dan transportasi tidak berubah.",content:"Keputusan rumah tangga yang paling rasional berdasarkan konsep skala prioritas adalah ....",image:svgImage("PENDAPATAN TERBATAS","Kebutuhan meningkat, sumber daya tetap"),options:["mendahulukan kebutuhan pokok dan menunda kebutuhan kurang mendesak","membeli semua barang tanpa mempertimbangkan pendapatan","mengurangi seluruh kebutuhan pangan","menggunakan seluruh uang untuk barang tersier"],answer:"A",difficulty:"HOTS",explanation:"Skala prioritas mengarahkan rumah tangga memenuhi kebutuhan paling penting lebih dahulu ketika sumber daya terbatas."},
+{id:19,stimulus:"Sebuah UMKM makanan mengalami peningkatan pesanan. Pemilik membeli mesin sederhana agar produksi lebih cepat, sementara pekerja tetap menangani pengemasan dan pemasaran.",content:"Perubahan tersebut menunjukkan bahwa produsen ....",image:svgImage("UMKM MAKANAN","Modal + tenaga kerja → produksi"),options:["mengombinasikan faktor produksi untuk meningkatkan output","menghentikan fungsi tenaga kerja","berubah menjadi konsumen saja","menghilangkan kebutuhan modal"],answer:"A",difficulty:"HOTS",explanation:"Mesin merupakan modal dan pekerja merupakan tenaga kerja. Produsen mengombinasikan faktor produksi untuk meningkatkan efisiensi dan output."},
+{id:20,stimulus:"Daerah X menghasilkan kopi berkualitas, tetapi petani menerima harga rendah karena menjual secara individual. Setelah membentuk koperasi, petani melakukan pengolahan, pengemasan, dan pemasaran bersama.",content:"Dampak ekonomi yang paling mungkin terjadi adalah ....",image:svgImage("KOPERASI PETANI","Pengolahan • Pengemasan • Pemasaran"),options:["daya tawar dan nilai tambah produk meningkat","petani kehilangan akses pasar sepenuhnya","harga selalu turun karena produk dikemas","kegiatan produksi berhenti"],answer:"A",difficulty:"HOTS",explanation:"Kerja sama melalui koperasi dapat memperkuat posisi tawar dan menambah nilai produk melalui pengolahan serta pemasaran bersama."},
+{id:21,stimulus:"Permukiman masyarakat praaksara ditemukan dekat sungai. Di lokasi itu ditemukan alat batu, sisa tanaman, dan jejak tempat tinggal yang digunakan berulang.",content:"Kesimpulan yang paling kuat dari bukti tersebut adalah ....",image:svgImage("SITUS PRAAKSARA","Sungai • alat batu • sisa tanaman"),options:["masyarakat mulai hidup lebih menetap dan memanfaatkan lingkungan sekitar","masyarakat tidak memanfaatkan sumber air","masyarakat sepenuhnya hidup di laut","tidak ada kegiatan produksi pangan"],answer:"A",difficulty:"HOTS",explanation:"Bukti tempat tinggal berulang dan sisa tanaman mendukung kesimpulan adanya kehidupan yang lebih menetap serta pemanfaatan sumber daya sekitar."},
+{id:22,stimulus:"Sebuah prasasti menggunakan bahasa Sanskerta dan huruf Pallawa, sedangkan tradisi lokal tetap ditemukan dalam upacara masyarakat.",content:"Fenomena tersebut paling tepat dipahami sebagai ....",image:svgImage("AKULTURASI BUDAYA","Pengaruh luar bertemu tradisi lokal"),options:["hilangnya seluruh budaya lokal","akulturasi antara pengaruh India dan budaya setempat","penolakan total terhadap budaya luar","tidak adanya hubungan antarmasyarakat"],answer:"B",difficulty:"HOTS",explanation:"Akulturasi terjadi ketika unsur budaya luar diterima dan berpadu dengan budaya lokal tanpa sepenuhnya menghilangkan identitas setempat."},
+{id:23,stimulus:"Kota pelabuhan pada masa awal Islam dihuni pedagang lokal dan asing. Perdagangan berlangsung intensif dan muncul komunitas muslim di sekitar pelabuhan.",content:"Mengapa kota pelabuhan efektif menjadi pusat penyebaran Islam?",image:svgImage("KOTA PELABUHAN","Perdagangan menciptakan jaringan sosial"),options:["karena interaksi perdagangan memperluas jaringan sosial dan budaya","karena penduduk dilarang berhubungan dengan pedagang","karena pelabuhan terpisah dari jalur perdagangan","karena penyebaran agama tidak berkaitan dengan interaksi sosial"],answer:"A",difficulty:"HOTS",explanation:"Pertemuan pedagang dan penduduk membentuk jaringan sosial yang memungkinkan pertukaran gagasan, budaya, dan agama."},
+{id:24,stimulus:"Pemerintah kolonial memaksa petani menanam komoditas ekspor di sebagian lahan mereka. Akibatnya, waktu dan lahan untuk tanaman pangan berkurang.",content:"Dampak yang paling logis terhadap kehidupan petani adalah ....",image:svgImage("EKONOMI KOLONIAL","Lahan pangan ↘  tanaman ekspor ↗"),options:["ketahanan pangan petani berpotensi menurun","petani semakin bebas menentukan komoditas","seluruh beban kerja petani berkurang","produksi pangan pasti meningkat"],answer:"A",difficulty:"HOTS",explanation:"Pengalihan lahan dan tenaga untuk komoditas ekspor dapat mengurangi produksi pangan rumah tangga dan meningkatkan kerentanan."},
+{id:25,stimulus:"Pada awal abad ke-20, pelajar dari berbagai daerah bertemu di sekolah dan organisasi. Surat kabar juga menyebarkan gagasan tentang persatuan dan kondisi rakyat di berbagai wilayah.",content:"Hubungan yang paling tepat antara pendidikan, pers, dan nasionalisme adalah ....",image:svgImage("PERGERAKAN NASIONAL","Pendidikan + pers → kesadaran bersama"),options:["keduanya membantu pertukaran gagasan dan pembentukan identitas kebangsaan","keduanya membuat masyarakat semakin terisolasi","pers menghapus kebutuhan organisasi","pendidikan mencegah komunikasi antardaerah"],answer:"A",difficulty:"HOTS",explanation:"Sekolah, organisasi, dan pers memperluas jaringan antardaerah serta menyebarkan gagasan yang membangun kesadaran sebagai satu bangsa."},
+{id:26,stimulus:"Sebuah desa penghasil buah mengalami banyak produk terbuang saat panen raya. Jalan menuju pasar kota sempit dan waktu tempuh lama.",content:"Solusi yang paling tepat berdasarkan konsep interaksi antarruang adalah ....",image:svgImage("DESA → KOTA","Akses distribusi menentukan jangkauan pasar"),options:["memperbaiki konektivitas dan mengembangkan pengolahan hasil","mengurangi seluruh produksi tanpa analisis","melarang penjualan ke luar desa","menghentikan penggunaan transportasi"],answer:"A",difficulty:"HOTS",explanation:"Perbaikan akses distribusi memperluas pasar, sementara pengolahan hasil memperpanjang umur simpan dan menambah nilai produk."},
+{id:27,stimulus:"Toko A membeli produk langsung dari produsen dan menjualnya kepada konsumen. Toko tersebut juga menyediakan layanan pesan antar.",content:"Peran utama Toko A dalam alur ekonomi adalah ....",image:svgImage("PRODUSEN → TOKO → KONSUMEN","Alur distribusi barang"),options:["distributor yang menyalurkan barang ke konsumen","produsen bahan mentah utama","rumah tangga konsumen saja","lembaga yang mencetak uang"],answer:"A",difficulty:"HOTS",explanation:"Toko menjalankan fungsi distribusi karena menyalurkan produk dari produsen kepada konsumen."},
+{id:28,stimulus:"Wilayah P memiliki jumlah penduduk meningkat cepat. Lahan pertanian di pinggir kota berubah menjadi perumahan dan pusat jasa.",content:"Perubahan yang paling mungkin terjadi dalam struktur ekonomi wilayah tersebut adalah ....",image:svgImage("URBANISASI","Lahan pertanian ↘  jasa & permukiman ↗"),options:["tenaga kerja bergeser sebagian dari sektor pertanian ke jasa","seluruh penduduk kembali ke pertanian","kegiatan jasa otomatis hilang","interaksi desa-kota berhenti"],answer:"A",difficulty:"HOTS",explanation:"Urbanisasi dan perubahan penggunaan lahan biasanya mendorong pergeseran tenaga kerja dan aktivitas ekonomi menuju sektor nonpertanian."},
+{id:29,stimulus:"Dua daerah sama-sama menghasilkan kerajinan. Daerah A memiliki akses internet dan logistik baik, sedangkan Daerah B sulit mengakses pasar di luar wilayah.",content:"Jika kualitas produk sama, mengapa penjualan Daerah A berpotensi lebih tinggi?",image:svgImage("AKSES PASAR","Internet + logistik memperluas jangkauan"),options:["akses informasi dan distribusi memperluas pasar","lokasi tidak pernah memengaruhi perdagangan","konsumen hanya membeli produk dari satu wilayah","logistik tidak berkaitan dengan distribusi"],answer:"A",difficulty:"HOTS",explanation:"Konektivitas digital dan logistik menurunkan hambatan jarak sehingga produsen dapat menjangkau lebih banyak konsumen."},
+{id:30,stimulus:"Sebuah organisasi pemuda pada masa pergerakan awalnya beranggotakan orang dari satu daerah. Dalam perkembangannya, organisasi tersebut bekerja sama dengan kelompok dari daerah lain dan mengutamakan tujuan kemerdekaan bersama.",content:"Perubahan tersebut mencerminkan ....",image:svgImage("DARI KEDAERAHAN KE KEBANGSAAN","Tujuan bersama melampaui identitas daerah"),options:["menguatnya identitas kebangsaan dan persatuan","melemahnya komunikasi antardaerah","kembalinya politik kerajaan tradisional","hilangnya seluruh organisasi modern"],answer:"A",difficulty:"HOTS",explanation:"Kerja sama lintas daerah dan tujuan kemerdekaan bersama menunjukkan berkembangnya nasionalisme Indonesia."}
+];
+
+let questions = loadQuestions();
+let state = loadSavedState();
+let cheatTimer=null, cheatLeft=10, examInterval=null, adminEditingId=null;
+let adminView="dashboard";
+
+function freshState(){
+ return {
+   page:"home",
+   student:{name:"",className:"",nis:""},
+   currentQuestion:0,
+   answers:{},
+   doubtful:{},
+   violations:0,
+   remainingTime:3600,
+   endAt:null,
+   started:false,
+   submitted:false,
+   role:"student",
+   sessionId:"",
+   optionOrder:{},
+   excelSyncStatus:"not_sent"
+ };
+}
+function loadSavedState(){
+ try{
+   const saved=JSON.parse(localStorage.getItem(APP_KEY)||"null");
+   if(saved && saved.page==="exam" && saved.started && !saved.submitted && saved.student && saved.endAt){
+     saved.remainingTime=Math.max(0,Math.ceil((saved.endAt-Date.now())/1000));
+     if(saved.remainingTime>0) return {...freshState(),...saved};
+   }
+ }catch(e){}
+ return freshState();
+}
+function randomInt(max){
+  if(window.crypto && window.crypto.getRandomValues){
+    const a=new Uint32Array(1); window.crypto.getRandomValues(a); return a[0]%max;
+  }
+  return Math.floor(Math.random()*max);
+}
+function shuffleArray(arr){
+  const out=[...arr];
+  for(let i=out.length-1;i>0;i--){const j=randomInt(i+1);[out[i],out[j]]=[out[j],out[i]]}
+  return out;
+}
+function makeBalancedOptionOrder(){
+  const letters=["A","B","C","D"];
+  const targets=[];
+  for(let i=0;i<questions.length;i++) targets.push(letters[i%4]);
+  const shuffledTargets=shuffleArray(targets);
+  const map={};
+  questions.forEach((q,idx)=>{
+    const correctOriginal="ABCD".indexOf(q.answer);
+    const targetIndex="ABCD".indexOf(shuffledTargets[idx]);
+    const others=shuffleArray([0,1,2,3].filter(x=>x!==correctOriginal));
+    const order=[null,null,null,null];
+    order[targetIndex]=correctOriginal;
+    let p=0;
+    for(let i=0;i<4;i++){if(order[i]===null)order[i]=others[p++]}
+    map[q.id]=order;
+  });
+  return map;
+}
+function getExamQuestion(q){
+  const order=state.optionOrder && state.optionOrder[q.id];
+  if(!Array.isArray(order)||order.length!==4) return q;
+  const correctOriginal="ABCD".indexOf(q.answer);
+  const displayedCorrect=order.indexOf(correctOriginal);
+  return {...q,options:order.map(i=>q.options[i]),answer:"ABCD"[displayedCorrect]};
+}
+function loadQuestions(){
+ try{
+  const x=JSON.parse(localStorage.getItem(QUESTION_KEY));
+  return Array.isArray(x)&&x.length?x:JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
+ }catch{return JSON.parse(JSON.stringify(DEFAULT_QUESTIONS))}
+}
+function persistQuestions(){localStorage.setItem(QUESTION_KEY,JSON.stringify(questions))}
+function saveState(){try{localStorage.setItem(APP_KEY,JSON.stringify(state))}catch(e){}}
+function loadSubmissions(){try{return JSON.parse(localStorage.getItem(SUBMISSION_KEY)||"[]")}catch{return []}}
+function render(){
+ const app=document.getElementById("app");
+ if(state.page==="home") app.innerHTML=homeHTML();
+ if(state.page==="exam") app.innerHTML=examHTML();
+ if(state.page==="result") app.innerHTML=resultHTML();
+ if(state.page==="admin") app.innerHTML=adminHTML();
+}
+function homeHTML(){
+ return `<div class="center-wrap"><div class="home-shell">
+ <section class="hero"><span class="pill">ANBK • Kurikulum Merdeka</span><h1>Seleksi Lomba KSSK</h1>
+ <p>Ilmu Pengetahuan Sosial — SMP Kelas VIII</p>
+ <div class="info-grid"><div class="info-box"><b>${questions.length} Soal</b><br><small>Reguler + HOTS</small></div><div class="info-box"><b>60 Menit</b><br><small>Countdown realtime</small></div><div class="info-box"><b>Pilihan Ganda</b><br><small>4 opsi • kunci diacak</small></div><div class="info-box"><b>Auto Save</b><br><small>Jawaban tersimpan lokal</small></div></div>
+ </section>
+ <section class="login-panel"><h2>Identitas Peserta</h2><p class="muted">Lengkapi data sebelum memulai ujian.</p>
+ <div class="field"><label>Nama Lengkap</label><input id="studentName" placeholder="Nama siswa"></div>
+ <div class="field"><label>Kelas</label><input id="studentClass" placeholder="Contoh: VIII A"></div>
+ <div class="field"><label>NIS</label><input id="studentNis" placeholder="Nomor Induk Siswa"></div>
+ <button class="btn btn-primary" style="width:100%" onclick="prepareStart()">MULAI UJIAN</button>
+ <div class="quick-admin"><b>Akses cepat Admin</b><p class="muted small">Kelola soal, kunci, pembahasan, dan hasil siswa.</p>
+ <button class="btn btn-secondary" style="width:100%" onclick="openAdminLogin()">AKSES ADMIN</button></div>
+ </section></div></div>`;
+}
+function prepareStart(){
+ const name=document.getElementById("studentName").value.trim();
+ const className=document.getElementById("studentClass").value.trim();
+ const nis=document.getElementById("studentNis").value.trim();
+ if(!name||!className||!nis){alert("Silakan lengkapi identitas peserta terlebih dahulu.");return}
+ state=freshState();
+ state.student={name,className,nis};
+ showModal(`<h3>Konfirmasi Mulai Ujian</h3>
+ <p><b>Nama:</b> ${esc(name)}<br><b>Kelas:</b> ${esc(className)}<br><b>NIS:</b> ${esc(nis)}</p>
+ <p>Jumlah Soal: <b>${questions.length}</b><br>Durasi: <b>60 menit</b></p>
+ <p class="notice">Timer akan berjalan setelah ujian dimulai.</p>
+ <div class="row"><button class="btn btn-outline" onclick="closeModal()">BATAL</button><button class="btn btn-primary" onclick="startExam()">YA, MULAI UJIAN</button></div>`);
+}
+function startExam(){
+ closeModal();
+ state.page="exam";
+ state.started=true;
+ state.submitted=false;
+ state.sessionId=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():("KSSK-"+Date.now()+"-"+Math.random().toString(36).slice(2,8));
+ state.optionOrder=makeBalancedOptionOrder();
+ state.endAt=Date.now()+3600*1000;
+ state.remainingTime=3600;
+ saveState();
+ render();
+ startTimer();
+}
+function examHTML(){
+ const q=getExamQuestion(questions[state.currentQuestion]);
+ const answered=Object.keys(state.answers).length;
+ return `<div class="page">
+ <div class="topbar"><div><div class="brand">Seleksi Lomba KSSK</div><small class="muted">IPS — Kelas VIII</small></div>
+ <div class="muted">${esc(state.student.name)} • ${esc(state.student.nis)}</div>
+ <div id="timer" class="timer">${formatTime(state.remainingTime)}</div></div>
+ <div class="exam-layout"><aside class="sidebar"><b>DAFTAR SOAL</b>
+ <div class="q-grid">${questions.map((x,i)=>`<button class="qnum ${state.answers[x.id]?"answered":""} ${state.doubtful[x.id]?"doubt":""} ${i===state.currentQuestion?"active":""}" onclick="goQ(${i})">${i+1}</button>`).join("")}</div>
+ <div class="progress"><div style="width:${(answered/questions.length)*100}%"></div></div><p><b>Terjawab ${answered} / ${questions.length}</b></p>
+ <div class="legend"><span><i class="dot gray"></i> Belum dijawab</span><span><i class="dot blue"></i> Sudah dijawab</span><span><i class="dot yellow"></i> Ragu-ragu</span></div>
+ </aside>
+ <main class="exam-main"><div class="card">
+ <div class="qhead"><div><b>Soal ${state.currentQuestion+1} dari ${questions.length}</b></div><span class="badge">${esc(q.difficulty)}</span></div>
+ ${q.stimulus?`<div class="stimulus"><b>STIMULUS</b><p>${esc(q.stimulus)}</p></div>`:""}
+ ${q.image?`<img class="qimage" src="${attr(q.image)}" alt="Stimulus visual soal ${q.id}: ${attr(q.content.slice(0,90))}" loading="eager" decoding="async" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=&quot;notice&quot;>Gambar stimulus soal ${q.id} tidak dapat dimuat.</div>')">`:""}
+ <h3>${esc(q.content)}</h3>
+ <div>${q.options.map((o,i)=>{const k="ABCD"[i];return `<div class="option ${state.answers[q.id]===k?"selected":""}" onclick="selectAnswer(${q.id},'${k}')"><span class="option-key">${k}.</span><span>${esc(o)}</span></div>`}).join("")}</div>
+ <div class="exam-actions"><button class="btn btn-outline" ${state.currentQuestion===0?"disabled":""} onclick="prevQ()">← Sebelumnya</button>
+ <button class="btn ${state.doubtful[q.id]?"btn-secondary":"btn-outline"}" onclick="toggleDoubt(${q.id})">${state.doubtful[q.id]?"Hapus Ragu-ragu":"Tandai Ragu-ragu"}</button>
+ <button class="btn btn-primary" onclick="${state.currentQuestion===questions.length-1?"confirmSubmit()":"nextQ()"}">${state.currentQuestion===questions.length-1?"SELESAI UJIAN":"Selanjutnya →"}</button></div>
+ </div></main></div></div>`;
+}
+function selectAnswer(id,key){state.answers[id]=key;saveState();render()}
+function toggleDoubt(id){state.doubtful[id]=!state.doubtful[id];saveState();render()}
+function goQ(i){state.currentQuestion=i;saveState();render()}
+function nextQ(){if(state.currentQuestion<questions.length-1)goQ(state.currentQuestion+1)}
+function prevQ(){if(state.currentQuestion>0)goQ(state.currentQuestion-1)}
+function startTimer(){
+ clearInterval(examInterval);
+ examInterval=setInterval(()=>{
+  if(state.page!=="exam"||state.submitted){clearInterval(examInterval);return}
+  state.remainingTime=Math.max(0,Math.ceil((state.endAt-Date.now())/1000));
+  const el=document.getElementById("timer");
+  if(el){el.textContent=formatTime(state.remainingTime);el.classList.toggle("warning",state.remainingTime<=600);el.classList.toggle("danger",state.remainingTime<=300)}
+  saveState();
+  if(state.remainingTime<=0)submitExam("Waktu habis");
+ },1000);
+}
+function formatTime(sec){const m=Math.floor(sec/60),s=sec%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
+function confirmSubmit(){
+ const answered=Object.keys(state.answers).length;
+ const doubt=Object.values(state.doubtful).filter(Boolean).length;
+ const blank=questions.length-answered;
+ showModal(`<h3>Selesaikan Ujian?</h3><p>Terjawab: <b>${answered}</b><br>Belum dijawab: <b>${blank}</b><br>Ragu-ragu: <b>${doubt}</b></p>
+ <p>Pastikan semua jawaban sudah diperiksa sebelum mengakhiri ujian.</p>
+ <div class="row"><button class="btn btn-outline" onclick="closeModal()">KEMBALI KE UJIAN</button><button class="btn btn-danger" onclick="submitExam('Selesai oleh siswa')">SUBMIT UJIAN</button></div>`);
+}
+async function submitExam(reason){
+ if(state.submitted)return;
+ state.submitted=true;state.submitReason=reason;clearInterval(examInterval);clearInterval(cheatTimer);
+ closeModal();document.getElementById("cheatOverlay").classList.add("hidden");
+ const result=calculateResult();
+ const timestamp=new Date().toISOString();
+ const payload=buildExcelPayload(result,reason,timestamp);
+ const record={...result,student:{...state.student},answers:{...state.answers},timestamp,reason,sessionId:state.sessionId,violations:state.violations,excelSyncStatus:getExcelConfig().webhookUrl?"pending":"not_sent"};
+ const submissions=loadSubmissions();
+ submissions.push(record);
+ localStorage.setItem(SUBMISSION_KEY,JSON.stringify(submissions));
+ state.excelSyncStatus=getExcelConfig().webhookUrl?"pending":"not_sent";
+ state.page="result";
+ saveState();
+ render();
+
+ const syncResult=await syncSubmissionToExcel(payload);
+ state.excelSyncStatus=syncResult.status;
+ const updated=loadSubmissions();
+ const idx=updated.findIndex(x=>x.sessionId===state.sessionId);
+ if(idx>=0){updated[idx].excelSyncStatus=syncResult.status;updated[idx].excelMessage=syncResult.message||"";localStorage.setItem(SUBMISSION_KEY,JSON.stringify(updated))}
+ saveState();
+ if(state.page==="result")render();
+}
+function calculateResult(){
+ let correct=0;
+ questions.forEach(q=>{const sq=getExamQuestion(q);if(state.answers[q.id]===sq.answer)correct++});
+ const answered=Object.keys(state.answers).length;
+ return {correct,wrong:questions.length-correct,answered,blank:questions.length-answered,score:Math.round((correct/questions.length)*10000)/100};
+}
+function buildExcelPayload(result,reason,timestamp){
+ const payload={
+   timestamp,sessionId:state.sessionId,nama:state.student.name,kelas:state.student.className,nis:state.student.nis,
+   nilai:result.score,benar:result.correct,salah:result.wrong,terjawab:result.answered,kosong:result.blank,
+   pelanggaran:state.violations,alasanSubmit:reason
+ };
+ questions.forEach((q,i)=>{payload["jawaban"+(i+1)]=state.answers[q.id]||""});
+ return payload;
+}
+function resultHTML(){
+ const r=calculateResult();
+ const advice=r.score>=90?"Pemahaman Anda sangat baik. Pertahankan kemampuan analisis dan terus berlatih soal HOTS.":
+ r.score>=80?"Pemahaman Anda baik. Tingkatkan latihan pada soal analisis dan interpretasi stimulus.":
+ r.score>=70?"Pemahaman cukup baik, tetapi beberapa konsep perlu dipelajari kembali.":
+ "Disarankan mempelajari kembali materi utama dan berlatih soal secara bertahap.";
+ return `<div class="topbar no-print"><div class="brand">Hasil Ujian</div><button class="btn btn-outline" onclick="goHome()">Kembali ke Home</button></div>
+ <div class="result-wrap">
+ <div class="score-card"><div>Nilai</div><div class="score">${r.score.toFixed(2)}</div><div>${esc(state.student.name)} • ${esc(state.student.className)} • NIS ${esc(state.student.nis)}</div></div>
+ <div class="stats"><div class="stat"><b>${questions.length}</b><br>Total Soal</div><div class="stat"><b>${r.answered}</b><br>Terjawab</div><div class="stat"><b>${r.correct}</b><br>Benar</div><div class="stat"><b>${r.wrong}</b><br>Salah</div><div class="stat"><b>${r.score.toFixed(2)}%</b><br>Persentase</div></div>
+ <div class="card"><h3>Saran Pembelajaran</h3><p>${advice}</p></div>
+ <div class="card no-print"><b>Status Excel Online:</b> ${excelStatusLabel(state.excelSyncStatus)}</div>
+ <div class="no-print" style="display:flex;gap:10px;margin:16px 0;flex-wrap:wrap"><button class="btn btn-primary" onclick="window.print()">PRINT / SAVE PDF</button><button class="btn btn-secondary" onclick="downloadCurrentResult()">DOWNLOAD HASIL CSV</button></div>
+ <h2>Pembahasan Soal</h2>
+ ${questions.map((q,i)=>{
+   const sq=getExamQuestion(q);
+   const user=state.answers[q.id]||"-";
+   const ok=user===sq.answer;
+   return `<div class="card review ${ok?"correct":"wrong"}"><b>Soal ${i+1} • ${q.difficulty}</b><p>${esc(q.content)}</p>
+   <p><b>Jawaban Anda:</b> ${user}<br><b>Jawaban Benar:</b> ${sq.answer}<br><b>Status:</b> ${ok?"BENAR":"SALAH"}</p>
+   <p><b>Pembahasan:</b> ${esc(q.explanation)}</p></div>`
+ }).join("")}
+ </div>`;
+}
+function goHome(){state=freshState();state.page="home";saveState();render()}
+function downloadCurrentResult(){
+ const r=calculateResult();
+ const rows=[["Nama","Kelas","NIS","Nilai","Benar","Salah","Terjawab","Kosong"],[state.student.name,state.student.className,state.student.nis,r.score,r.correct,r.wrong,r.answered,r.blank]];
+ downloadCSV(rows,"hasil-"+safeName(state.student.nis||"ujian")+".csv");
+}
+
+function openAdminLogin(){
+ showModal(`<h3>Akses Admin</h3><div class="field"><label>Password</label><input id="adminPass" type="password" placeholder="Masukkan password"></div>
+ <div class="row"><button class="btn btn-outline" onclick="closeModal()">BATAL</button><button class="btn btn-primary" onclick="adminLogin()">MASUK</button></div>
+ <p class="muted small">Password demo default: 1234. Ini bukan autentikasi server-side.</p>`);
+}
+function adminLogin(){
+ const p=document.getElementById("adminPass").value;
+ if(p!==ADMIN_PASSWORD){alert("Password salah. Silakan coba kembali.");return}
+ closeModal();state.page="admin";state.role="admin";adminView="dashboard";render();
+}
+function adminHTML(){
+ return `<div class="admin-layout">
+ <aside class="admin-nav"><h2>ADMIN KSSK</h2><p class="small" style="opacity:.8">IPS SMP Kelas VIII</p>
+ <button class="${adminView==="dashboard"?"active":""}" onclick="adminView='dashboard';render()">Dashboard</button>
+ <button class="${adminView==="questions"?"active":""}" onclick="adminView='questions';render()">Kelola Soal</button>
+ <button class="${adminView==="form"?"active":""}" onclick="openQuestionForm()">Tambah Soal</button>
+ <button class="${adminView==="submissions"?"active":""}" onclick="adminView='submissions';render()">Data Hasil</button>
+ <button class="${adminView==="excel"?"active":""}" onclick="adminView='excel';render()">Koneksi Excel</button>
+ <button onclick="adminLogout()">Keluar</button></aside>
+ <main class="admin-main">${adminBody()}</main></div>`;
+}
+function adminBody(){
+ if(adminView==="dashboard"){
+   const reg=questions.filter(q=>q.difficulty==="REGULER").length, hots=questions.filter(q=>q.difficulty==="HOTS").length, subs=loadSubmissions();
+   const excel=getExcelConfig();
+   return `<h1>Dashboard Admin</h1><div class="metric-grid">
+   <div class="metric">Total Soal<strong>${questions.length}</strong></div><div class="metric">Soal Reguler<strong>${reg}</strong></div><div class="metric">Soal HOTS<strong>${hots}</strong></div><div class="metric">Hasil Siswa<strong>${subs.length}</strong></div></div>
+   <div class="${excel.webhookUrl?"success":"notice"}"><b>Excel Online:</b> ${excel.webhookUrl?"Webhook Power Automate sudah disimpan. Hasil submit akan dikirim otomatis.":"Belum terhubung. Buka menu Koneksi Excel dan masukkan URL HTTP POST dari Power Automate."}</div>`;
+ }
+ if(adminView==="questions") return questionManagerHTML();
+ if(adminView==="form") return questionFormHTML();
+ if(adminView==="submissions") return submissionsHTML();
+ if(adminView==="excel") return excelConfigHTML();
+ return "";
+}
+function questionManagerHTML(){
+ return `<h1>Kelola Soal</h1><div class="searchbar"><input id="qSearch" placeholder="Cari pertanyaan..." oninput="filterQuestions()"><select id="qFilter" onchange="filterQuestions()"><option value="ALL">SEMUA</option><option>REGULER</option><option>HOTS</option></select><button class="btn btn-primary" onclick="openQuestionForm()">Tambah Soal</button></div>
+ <div id="questionTable">${questionTableHTML(questions)}</div>`;
+}
+function questionTableHTML(list){
+ return `<div class="table-wrap"><table><thead><tr><th>No</th><th>Pertanyaan</th><th>Tipe</th><th>Kunci</th><th>Aksi</th></tr></thead><tbody>
+ ${list.map(q=>`<tr><td>${q.id}</td><td>${esc(q.content)}</td><td>${q.difficulty}</td><td><b>${q.answer}</b></td><td><div class="actions">
+ <button class="btn btn-outline" onclick="viewQuestion(${q.id})">Lihat</button><button class="btn btn-secondary" onclick="editQuestion(${q.id})">Edit</button><button class="btn btn-danger" onclick="deleteQuestion(${q.id})">Hapus</button>
+ </div></td></tr>`).join("")}</tbody></table></div>`;
+}
+function filterQuestions(){
+ const term=document.getElementById("qSearch").value.toLowerCase(),f=document.getElementById("qFilter").value;
+ const list=questions.filter(q=>(f==="ALL"||q.difficulty===f)&&q.content.toLowerCase().includes(term));
+ document.getElementById("questionTable").innerHTML=questionTableHTML(list);
+}
+function viewQuestion(id){
+ const q=questions.find(x=>x.id===id);if(!q)return;
+ showModal(`<h3>Detail Soal ${q.id}</h3><p><b>Tipe:</b> ${q.difficulty}</p>${q.stimulus?`<p><b>Stimulus:</b><br>${esc(q.stimulus)}</p>`:""}${q.image?`<img class="img-preview" src="${attr(q.image)}" alt="Preview">`:""}
+ <p><b>Pertanyaan:</b><br>${esc(q.content)}</p>${q.options.map((o,i)=>`<p><b>${"ABCD"[i]}.</b> ${esc(o)}</p>`).join("")}
+ <p><b>Kunci:</b> ${q.answer}</p><p><b>Penjelasan:</b><br>${esc(q.explanation)}</p><button class="btn btn-primary" onclick="closeModal()">Tutup</button>`);
+}
+function openQuestionForm(){adminEditingId=null;adminView="form";render()}
+function editQuestion(id){adminEditingId=id;adminView="form";render()}
+function questionFormHTML(){
+ const q=adminEditingId?questions.find(x=>x.id===adminEditingId):{id:"",difficulty:"REGULER",stimulus:"",image:"",content:"",options:["","","",""],answer:"A",explanation:""};
+ return `<h1>${adminEditingId?"Edit":"Tambah"} Soal</h1><div class="admin-form">
+ <div class="row"><div class="field"><label>ID</label><input id="fId" type="number" min="1" value="${q.id||""}"></div><div class="field"><label>Tipe</label><select id="fDiff"><option ${q.difficulty==="REGULER"?"selected":""}>REGULER</option><option ${q.difficulty==="HOTS"?"selected":""}>HOTS</option></select></div></div>
+ <div class="field"><label>Stimulus</label><textarea id="fStim">${esc(q.stimulus||"")}</textarea></div>
+ <div class="field"><label>URL Gambar</label><input id="fImage" value="${attr(q.image||"")}" placeholder="https://..." oninput="previewAdminImage()"></div>
+ <div id="imgPreviewWrap">${q.image?`<img class="img-preview" src="${attr(q.image)}" alt="Preview">`:""}</div>
+ <div class="field"><label>Pertanyaan</label><textarea id="fContent">${esc(q.content)}</textarea></div>
+ ${["A","B","C","D"].map((k,i)=>`<div class="field"><label>Pilihan ${k}</label><input id="f${k}" value="${attr(q.options[i]||"")}"></div>`).join("")}
+ <div class="field"><label>Kunci Jawaban</label><select id="fAns">${["A","B","C","D"].map(k=>`<option ${q.answer===k?"selected":""}>${k}</option>`).join("")}</select></div>
+ <div class="field"><label>Penjelasan</label><textarea id="fExp">${esc(q.explanation)}</textarea></div>
+ <div class="row"><button class="btn btn-outline" onclick="adminView='questions';render()">BATAL</button><button class="btn btn-primary" onclick="saveQuestion()">SIMPAN</button></div>
+ </div>`;
+}
+function previewAdminImage(){
+ const u=document.getElementById("fImage").value.trim(),w=document.getElementById("imgPreviewWrap");
+ w.innerHTML=u?`<img class="img-preview" src="${attr(u)}" alt="Preview" onerror="this.outerHTML='<div class=&quot;notice&quot;>Gambar tidak dapat dimuat. Periksa URL.</div>'">`:"";
+}
+function saveQuestion(){
+ const id=Number(document.getElementById("fId").value),difficulty=document.getElementById("fDiff").value,stimulus=document.getElementById("fStim").value.trim(),image=document.getElementById("fImage").value.trim()||null,content=document.getElementById("fContent").value.trim(),answer=document.getElementById("fAns").value,explanation=document.getElementById("fExp").value.trim();
+ const options=["A","B","C","D"].map(k=>document.getElementById("f"+k).value.trim());
+ if(!id||!content||options.some(x=>!x)||!explanation){alert("ID, pertanyaan, semua opsi, kunci, dan penjelasan wajib diisi.");return}
+ if(difficulty==="HOTS"&&!stimulus){alert("Soal HOTS wajib memiliki stimulus.");return}
+ if(!adminEditingId&&questions.some(q=>q.id===id)){alert("ID soal sudah digunakan.");return}
+ const obj={id,content,stimulus:stimulus||null,image,options,answer,difficulty,explanation};
+ if(adminEditingId){
+   const idx=questions.findIndex(q=>q.id===adminEditingId);if(idx>=0)questions[idx]=obj;
+ } else questions.push(obj);
+ questions.sort((a,b)=>a.id-b.id);persistQuestions();adminEditingId=null;adminView="questions";render();
+}
+function deleteQuestion(id){
+ const q=questions.find(x=>x.id===id);if(!q)return;
+ showModal(`<h3>Hapus Soal?</h3><p>Apakah Anda yakin ingin menghapus soal nomor ${id}?</p><div class="row"><button class="btn btn-outline" onclick="closeModal()">BATAL</button><button class="btn btn-danger" onclick="confirmDelete(${id})">HAPUS</button></div>`);
+}
+function confirmDelete(id){questions=questions.filter(q=>q.id!==id);persistQuestions();closeModal();render()}
+function submissionsHTML(){
+ const subs=loadSubmissions();
+ return `<h1>Data Hasil Siswa</h1><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" onclick="exportSubmissions()">EXPORT CSV UNTUK EXCEL</button><button class="btn btn-secondary" onclick="retryPendingExcel()">KIRIM ULANG DATA BELUM SYNC</button><button class="btn btn-outline" onclick="clearSubmissions()">Hapus Semua Data</button></div>
+ <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Nama</th><th>Kelas</th><th>NIS</th><th>Nilai</th><th>Benar</th><th>Terjawab</th><th>Excel</th><th>Alasan Submit</th></tr></thead><tbody>
+ ${subs.length?subs.map(s=>`<tr><td>${esc(formatDate(s.timestamp))}</td><td>${esc(s.student.name)}</td><td>${esc(s.student.className)}</td><td>${esc(s.student.nis)}</td><td>${Number(s.score).toFixed(2)}</td><td>${s.correct}</td><td>${s.answered}</td><td>${excelStatusLabel(s.excelSyncStatus||"not_sent")}</td><td>${esc(s.reason)}</td></tr>`).join(""):`<tr><td colspan="9">Belum ada data hasil.</td></tr>`}
+ </tbody></table></div>`;
+}
+function exportSubmissions(){
+ const subs=loadSubmissions();
+ const rows=[["Timestamp","SessionID","Nama","Kelas","NIS","Nilai","Benar","Salah","Terjawab","Kosong","Pelanggaran","Status Excel","Alasan Submit"]];
+ subs.forEach(s=>rows.push([s.timestamp,s.sessionId||"",s.student.name,s.student.className,s.student.nis,s.score,s.correct,s.wrong,s.answered,s.blank,s.violations||"",s.excelSyncStatus||"",s.reason]));
+ downloadCSV(rows,"data-hasil-kssk.csv");
+}
+function clearSubmissions(){if(confirm("Hapus seluruh data hasil siswa di browser ini?")){localStorage.removeItem(SUBMISSION_KEY);render()}}
+function adminLogout(){state=freshState();state.page="home";render()}
+
+function downloadCSV(rows,filename){
+ const csv=rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n");
+ const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+}
+function safeName(v){return String(v).replace(/[^a-z0-9_-]+/gi,"-")}
+function formatDate(v){try{return new Date(v).toLocaleString("id-ID")}catch{return v}}
+
+function showModal(inner){document.getElementById("modalRoot").innerHTML=`<div class="modal-backdrop"><div class="modal">${inner}</div></div>`}
+function closeModal(){document.getElementById("modalRoot").innerHTML=""}
+
+function triggerCheatWarning(){
+ if(state.page!=="exam"||state.submitted)return;
+ state.violations++;
+ saveState();
+ if(state.violations>=3){submitExam("Pelanggaran anti-cheating ke-3");return}
+ cheatLeft=10;
+ document.getElementById("violationText").textContent=`Pelanggaran ${state.violations} dari 3`;
+ document.getElementById("cheatCount").textContent=cheatLeft;
+ document.getElementById("cheatOverlay").classList.remove("hidden");
+ clearInterval(cheatTimer);
+ cheatTimer=setInterval(()=>{
+   cheatLeft--;document.getElementById("cheatCount").textContent=cheatLeft;
+   if(cheatLeft<=0){clearInterval(cheatTimer);submitExam("Tidak kembali dari peringatan anti-cheating dalam 10 detik")}
+ },1000);
+}
+function returnToExam(){clearInterval(cheatTimer);document.getElementById("cheatOverlay").classList.add("hidden")}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)triggerCheatWarning()});
+document.addEventListener("contextmenu",e=>{if(state.page==="exam")e.preventDefault()});
+document.addEventListener("keydown",e=>{
+ if(state.page!=="exam")return;
+ const k=e.key.toLowerCase();
+ if(e.key==="F12"||(e.ctrlKey&&e.shiftKey&&(k==="i"||k==="j"||k==="c"))||(e.ctrlKey&&(k==="u"||k==="c"))){e.preventDefault()}
+});
+
+window.addEventListener("beforeunload",e=>{if(state.page==="exam"&&!state.submitted){saveState();e.preventDefault();e.returnValue=""}});
+
+/*
+  EXCEL ONLINE / POWER AUTOMATE
+  -----------------------------
+  Admin memasukkan URL dari trigger "When an HTTP request is received".
+  Flow kemudian memakai Excel Online (Business) -> "Add a row into a table".
+  Jika koneksi gagal, hasil tetap aman di localStorage dan bisa dikirim ulang.
+*/
+function getExcelConfig(){
+  try{return JSON.parse(localStorage.getItem(EXCEL_CONFIG_KEY)||'{"webhookUrl":""}')}catch{return {webhookUrl:""}}
+}
+function excelConfigHTML(){
+  const cfg=getExcelConfig();
+  return `<h1>Koneksi Excel Online</h1><div class="admin-form">
+  <div class="field"><label>Power Automate HTTP POST URL</label><input id="excelWebhook" type="url" value="${attr(cfg.webhookUrl||"")}" placeholder="https://...logic.azure.com/..."></div>
+  <div class="notice"><b>Cara kerja:</b> hasil ujian disimpan lokal terlebih dahulu, lalu dikirim ke Power Automate. Flow harus memakai Excel Online (Business) → <b>Add a row into a table</b>. Gunakan workbook template yang disertakan bersama aplikasi.</div>
+  <button class="btn btn-primary" onclick="saveExcelConfig()">SIMPAN KONEKSI</button>
+  <p class="muted small">Untuk aplikasi publik berskala besar, jangan mengandalkan URL webhook rahasia di browser sebagai satu-satunya lapisan keamanan. Gunakan backend/proxy terautentikasi.</p>
+  </div>`;
+}
+function saveExcelConfig(){
+  const url=document.getElementById("excelWebhook").value.trim();
+  if(url && !/^https:\/\//i.test(url)){alert("URL harus menggunakan HTTPS.");return}
+  localStorage.setItem(EXCEL_CONFIG_KEY,JSON.stringify({webhookUrl:url}));
+  alert(url?"Koneksi Excel disimpan. Submit berikutnya akan dikirim otomatis.":"Koneksi Excel dikosongkan.");
+  render();
+}
+function excelStatusLabel(status){
+  if(status==="synced") return '<span style="color:#166534;font-weight:800">TERKIRIM</span>';
+  if(status==="sent_unverified") return '<span style="color:#1d4ed8;font-weight:800">TERKIRIM*</span>';
+  if(status==="pending") return '<span style="color:#92400e;font-weight:800">MENUNGGU</span>';
+  if(status==="failed") return '<span style="color:#b91c1c;font-weight:800">GAGAL</span>';
+  return '<span class="muted">BELUM TERHUBUNG</span>';
+}
+async function syncSubmissionToExcel(payload){
+  const cfg=getExcelConfig();
+  if(!cfg.webhookUrl) return {status:"not_sent",message:"Webhook belum dikonfigurasi"};
+  try{
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),10000);
+    const response=await fetch(cfg.webhookUrl,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload),
+      signal:controller.signal
+    });
+    clearTimeout(timeout);
+    if(response.ok) return {status:"synced",message:"Excel menerima data"};
+    return {status:"failed",message:"HTTP "+response.status};
+  }catch(err){
+    try{
+      await fetch(cfg.webhookUrl,{
+        method:"POST",
+        mode:"no-cors",
+        headers:{"Content-Type":"text/plain;charset=UTF-8"},
+        body:JSON.stringify(payload)
+      });
+      return {status:"sent_unverified",message:"Permintaan dikirim dalam mode kompatibilitas browser"};
+    }catch(err2){
+      return {status:"failed",message:String(err2&&err2.message||err2)};
+    }
+  }
+}
+async function retryPendingExcel(){
+  const subs=loadSubmissions();
+  let attempted=0,ok=0;
+  for(const s of subs){
+    if(["synced","sent_unverified"].includes(s.excelSyncStatus)) continue;
+    attempted++;
+    const result={score:s.score,correct:s.correct,wrong:s.wrong,answered:s.answered,blank:s.blank};
+    const oldStudent=state.student,oldSession=state.sessionId,oldAnswers=state.answers,oldViolations=state.violations;
+    state.student=s.student;state.sessionId=s.sessionId||"";state.answers=s.answers||{};state.violations=s.violations||0;
+    const payload=buildExcelPayload(result,s.reason,s.timestamp);
+    const r=await syncSubmissionToExcel(payload);
+    s.excelSyncStatus=r.status;s.excelMessage=r.message||"";
+    if(["synced","sent_unverified"].includes(r.status))ok++;
+    state.student=oldStudent;state.sessionId=oldSession;state.answers=oldAnswers;state.violations=oldViolations;
+  }
+  localStorage.setItem(SUBMISSION_KEY,JSON.stringify(subs));
+  alert(`Percobaan kirim ulang: ${attempted}. Berhasil/terkirim: ${ok}.`);
+  render();
+}
+async function saveAnswerToExternalStore(payload){
+  // Auto-save per perubahan tetap dilakukan di localStorage.
+  // Sinkronisasi Excel dilakukan saat submit agar satu siswa = satu baris.
+  return {ok:true,mode:"localStorage"};
+}
+
+/* patch autosave hook */
+const _originalSelectAnswer=selectAnswer;
+selectAnswer=function(id,key){
+  state.answers[id]=key;saveState();
+  saveAnswerToExternalStore({student:state.student,questionId:id,answer:key,doubtful:!!state.doubtful[id],timestamp:new Date().toISOString()});
+  render();
+}
+const _originalToggleDoubt=toggleDoubt;
+toggleDoubt=function(id){
+  state.doubtful[id]=!state.doubtful[id];saveState();
+  saveAnswerToExternalStore({student:state.student,questionId:id,answer:state.answers[id]||null,doubtful:!!state.doubtful[id],timestamp:new Date().toISOString()});
+  render();
+}
+
+render();
+if(state.page==="exam" && state.started && !state.submitted)startTimer();
+</script>
+</body>
+</html>
